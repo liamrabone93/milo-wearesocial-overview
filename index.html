@@ -93,10 +93,17 @@ h2 .ac{color:var(--violet)}
 .tc .ex{margin-top:16px;font-size:.9rem;color:var(--violet-dp);border-left:2px solid var(--violet);padding-left:14px}
 
 /* ── video ──────────────────────────────────────── */
-.vid{max-width:840px;margin:48px auto 0;border-radius:6px;overflow:hidden;border:1px solid var(--on-dark-line);background:#000;box-shadow:0 30px 70px rgba(0,0,0,.45)}
+.vid{max-width:840px;margin:48px auto 0;border-radius:6px;overflow:hidden;border:1px solid var(--on-dark-line);background:#0C0A12;box-shadow:0 30px 70px rgba(0,0,0,.45)}
 .vid .frame{position:relative;aspect-ratio:16/9;max-width:100%}
 .vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.poster{position:absolute;inset:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;cursor:pointer;border:0;font-family:inherit;color:var(--on-dark);background:radial-gradient(118% 118% at 50% 38%,#2B2145 0%,#15121C 60%,#0B0910 100%)}
+.poster .ttl{font-family:'Bricolage Grotesque','Instrument Sans',sans-serif;font-weight:700;font-size:clamp(1.05rem,2.6vw,1.34rem);letter-spacing:-.04em;line-height:1.1}
+.poster .play{width:72px;height:72px;border-radius:50%;background:var(--violet);display:grid;place-items:center;box-shadow:0 14px 40px rgba(91,45,217,.5);transition:transform .25s ease,background .25s ease}
+.poster:hover .play,.poster:focus-visible .play{transform:scale(1.07);background:#6E42EE}
+.poster:focus-visible{outline:2px solid var(--violet-lt);outline-offset:-4px}
+.poster .sub{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--on-dark-dim)}
 .vid-note{font-family:'IBM Plex Mono',ui-monospace,monospace;text-align:center;margin-top:20px;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-dim)}
+.vid-note a{color:var(--violet-lt)}
 
 /* ── split ──────────────────────────────────────── */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:52px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
@@ -289,13 +296,16 @@ footer a{color:var(--violet-lt);text-decoration:none}
     <p class="lede">Rather than describe the question box any further, here it is working.</p>
 
     <div class="vid">
-      <div class="frame">
-        <iframe src="https://player.vimeo.com/video/1196983997?title=0&amp;byline=0&amp;portrait=0&amp;dnt=1"
-                allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
-                loading="lazy" title="Milo product overview"></iframe>
+      <div class="frame" id="vidframe" data-vid="1196983997">
+        <button class="poster" id="vidplay" type="button" aria-label="Play the Milo product overview, 1 minute 29 seconds">
+          <svg style="width:56px;height:45px" viewBox="0 0 50 40" aria-hidden="true"><use href="#milomark"/></svg>
+          <span class="ttl">Milo product overview</span>
+          <span class="play"><svg width="21" height="25" viewBox="0 0 21 25" aria-hidden="true"><path d="M3 2.5 L19 12.5 L3 22.5 Z" fill="#ffffff"/></svg></span>
+          <span class="sub">Press play · 1 min 29 sec</span>
+        </button>
       </div>
     </div>
-    <div class="vid-note">Milo product overview · 1 min 29 sec · <a href="https://vimeo.com/1196983997" target="_blank" rel="noopener" style="color:var(--violet-lt);text-decoration:underline">watch on Vimeo</a></div>
+    <div class="vid-note">Not playing? <a href="https://vimeo.com/1196983997" target="_blank" rel="noopener">Watch it on Vimeo</a></div>
   </div>
 </section>
 
@@ -502,6 +512,23 @@ footer a{color:var(--violet-lt);text-decoration:none}
 <footer>
   Prepared for Arran Cooper-Moxam, We Are Social, by <a href="mailto:liam@milo.ai">Liam Rabone</a> · Milo
 </footer>
+
+<script>
+(function(){
+  var f = document.getElementById('vidframe');
+  var b = document.getElementById('vidplay');
+  if(!f || !b) return;
+  b.addEventListener('click', function(){
+    var i = document.createElement('iframe');
+    i.src = 'https://player.vimeo.com/video/' + f.dataset.vid + '?title=0&byline=0&portrait=0&dnt=1&autoplay=1';
+    i.setAttribute('allow','autoplay; fullscreen; picture-in-picture');
+    i.setAttribute('allowfullscreen','');
+    i.setAttribute('title','Milo product overview');
+    f.appendChild(i);
+    b.remove();
+  });
+})();
+</script>
 
 </body>
 </html>
